@@ -4,6 +4,7 @@
 [![Downloads](http://img.shields.io/npm/dm/mkr.svg?style=flat)](https://www.npmjs.org/package/mkr)
 [![License](http://img.shields.io/npm/l/mkr.svg?style=flat)](https://www.npmjs.org/package/mkr)
 [![Dependencies Status](http://img.shields.io/david/lrsjng/mkr.svg?style=flat)](https://david-dm.org/lrsjng/mkr)
+[![Build Status](http://img.shields.io/travis/lrsjng/mkr.svg?style=flat)](https://travis-ci.org/lrsjng/mkr)
 
 Build tool.
 To report a bug or make a feature request please create [a new issue](https://github.com/lrsjng/mkr/issues/new).
