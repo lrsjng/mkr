@@ -1,6 +1,6 @@
 {
   "name": "mkr",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "target and task based build tool",
   "homepage": "http://larsjung.de/mkr/",
   "bugs": "https://github.com/lrsjng/mkr/issues",

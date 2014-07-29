@@ -11,7 +11,7 @@
 [![Build Status](http://img.shields.io/travis/lrsjng/mkr.svg?style=flat)](https://travis-ci.org/lrsjng/mkr)
 
 Target and task based build tool. This node module is ment to be installed locally. For a command line trigger
-have a look at [mkr-global](https://github.com/lrsjng/mkr-global).
+have a look at [`mkr-global`](https://github.com/lrsjng/mkr-global).
 To report a bug or make a feature request please create [a new issue](https://github.com/lrsjng/mkr/issues/new).
 
 
