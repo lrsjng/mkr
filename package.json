@@ -1,7 +1,7 @@
 {
   "name": "mkr",
-  "version": "0.1.5",
-  "description": "build tool",
+  "version": "0.1.6",
+  "description": "target and task based build tool",
   "homepage": "http://larsjung.de/mkr/",
   "bugs": "https://github.com/lrsjng/mkr/issues",
   "author": "Lars Jung <lrsjng@gmail.com> (http://larsjung.de)",
@@ -12,7 +12,7 @@
   },
   "main": "./lib/Mkr",
   "scripts": {
-    "test": "node_modules/.bin/mocha --recursive test"
+    "test": "mocha --recursive test"
   },
   "dependencies": {
     "chalk": "~0.5.1",

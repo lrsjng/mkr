@@ -1,15 +1,18 @@
 # mkr
 
+[![web](http://img.shields.io/badge/web-larsjung.de/mkr-a0a060.svg?style=flat)](http://larsjung.de/mkr/)
+[![GitHub](http://img.shields.io/badge/GitHub-lrsjng/mkr-a0a060.svg?style=flat)](https://github.com/lrsjng/mkr)
+[![npm](http://img.shields.io/badge/npm-mkr-a0a060.svg?style=flat)](https://www.npmjs.org/package/mkr)
+<br>
 [![Version](http://img.shields.io/npm/v/mkr.svg?style=flat)](https://www.npmjs.org/package/mkr)
 [![Downloads](http://img.shields.io/npm/dm/mkr.svg?style=flat)](https://www.npmjs.org/package/mkr)
 [![License](http://img.shields.io/npm/l/mkr.svg?style=flat)](https://www.npmjs.org/package/mkr)
 [![Dependencies Status](http://img.shields.io/david/lrsjng/mkr.svg?style=flat)](https://david-dm.org/lrsjng/mkr)
 [![Build Status](http://img.shields.io/travis/lrsjng/mkr.svg?style=flat)](https://travis-ci.org/lrsjng/mkr)
 
-Build tool.
+Target and task based build tool. This node module is ment to be installed locally. For a command line trigger
+have a look at [mkr-global](https://github.com/lrsjng/mkr-global).
 To report a bug or make a feature request please create [a new issue](https://github.com/lrsjng/mkr/issues/new).
-
-References: [web](http://larsjung.de/mkr/), [GitHub](https://github.com/lrsjng/mkr), [npm](https://www.npmjs.org/package/mkr)
 
 
 ## Install
