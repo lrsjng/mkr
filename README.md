@@ -1,18 +1,10 @@
 # mkr
 
-[![web](http://img.shields.io/badge/web-larsjung.de/mkr-a0a060.svg?style=flat)](http://larsjung.de/mkr/)
-[![GitHub](http://img.shields.io/badge/GitHub-lrsjng/mkr-a0a060.svg?style=flat)](https://github.com/lrsjng/mkr)
-[![npm](http://img.shields.io/badge/npm-mkr-a0a060.svg?style=flat)](https://www.npmjs.org/package/mkr)
-<br>
-[![Version](http://img.shields.io/npm/v/mkr.svg?style=flat)](https://www.npmjs.org/package/mkr)
-[![Downloads](http://img.shields.io/npm/dm/mkr.svg?style=flat)](https://www.npmjs.org/package/mkr)
-[![License](http://img.shields.io/npm/l/mkr.svg?style=flat)](https://www.npmjs.org/package/mkr)
-[![Dependencies Status](http://img.shields.io/david/lrsjng/mkr.svg?style=flat)](https://david-dm.org/lrsjng/mkr)
-[![Build Status](http://img.shields.io/travis/lrsjng/mkr.svg?style=flat)](https://travis-ci.org/lrsjng/mkr)
+[![web][web-img]][web] [![GitHub][github-img]][github] [![npm][npm-img]][npm]  
+[![Downloads][npm-dm-img]][npm] [![Dependencies Status][david-img]][david] [![Build Status][travis-img]][travis]
 
-Target and task based build tool. This node module is ment to be installed locally. For a command line trigger
-have a look at [`mkr-global`](https://github.com/lrsjng/mkr-global).
-To report a bug or make a feature request please create [a new issue](https://github.com/lrsjng/mkr/issues/new).
+Target and task based build tool. This node module is ment to be installed
+locally. For a command line trigger have a look at [`mkr-global`][mkr-global].
 
 
 ## Install
@@ -42,3 +34,22 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+
+[web]: http://larsjung.de/mkr/
+[github]: https://github.com/lrsjng/mkr
+[npm]: https://www.npmjs.org/package/mkr
+[david]: https://david-dm.org/lrsjng/mkr
+[travis]: https://travis-ci.org/lrsjng/mkr
+
+[web-img]: http://img.shields.io/badge/web-larsjung.de/mkr-a0a060.svg?style=flat-square
+[github-img]: http://img.shields.io/badge/GitHub-lrsjng/mkr-a0a060.svg?style=flat-square
+[npm-img]: http://img.shields.io/badge/npm-mkr-a0a060.svg?style=flat-square
+
+[npm-v-img]: http://img.shields.io/npm/v/mkr.svg?style=flat-square
+[npm-dm-img]: http://img.shields.io/npm/dm/mkr.svg?style=flat-square
+[npm-l-img]: http://img.shields.io/npm/l/mkr.svg?style=flat-square
+[david-img]: http://img.shields.io/david/lrsjng/mkr.svg?style=flat-square
+[travis-img]: http://img.shields.io/travis/lrsjng/mkr.svg?style=flat-square
+
+[mkr-global]: https://github.com/lrsjng/mkr-global

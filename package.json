@@ -1,6 +1,6 @@
 {
   "name": "mkr",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "description": "target and task based build tool",
   "homepage": "http://larsjung.de/mkr/",
   "bugs": "https://github.com/lrsjng/mkr/issues",
@@ -11,14 +11,17 @@
     "url": "https://github.com/lrsjng/mkr.git"
   },
   "main": "./lib/Mkr",
+  "bin": {
+    "mkr": "./bin/mkr.js"
+  },
   "scripts": {
     "test": "mocha --recursive test"
   },
   "dependencies": {
     "chalk": "~0.5.1",
     "commander": "~2.3.0",
-    "q": "~1.0.1",
-    "underscore": "~1.6.0"
+    "lodash": "~2.4.1",
+    "q": "~1.0.1"
   },
   "devDependencies": {
     "mocha": "~1.21.0"
