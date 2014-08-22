@@ -1,7 +1,7 @@
 # mkr
 
-[![web][web-img]][web] [![GitHub][github-img]][github] [![npm][npm-img]][npm]  
-[![Downloads][npm-dm-img]][npm] [![Dependencies Status][david-img]][david] [![Build Status][travis-img]][travis]
+[![license][license-img]][github] [![web][web-img]][web] [![github][github-img]][github] [![npm][npm-img]][npm]  
+[![version][npm-v-img]][npm] [![downloads][npm-dm-img]][npm] [![dependencies status][david-img]][david] [![build status][travis-img]][travis]
 
 Target and task based build tool. This node module is ment to be installed
 locally. For a command line trigger have a look at [`mkr-global`][mkr-global].
@@ -42,13 +42,13 @@ THE SOFTWARE.
 [david]: https://david-dm.org/lrsjng/mkr
 [travis]: https://travis-ci.org/lrsjng/mkr
 
+[license-img]: http://img.shields.io/badge/license-MIT-a0a060.svg?style=flat-square
 [web-img]: http://img.shields.io/badge/web-larsjung.de/mkr-a0a060.svg?style=flat-square
-[github-img]: http://img.shields.io/badge/GitHub-lrsjng/mkr-a0a060.svg?style=flat-square
+[github-img]: http://img.shields.io/badge/github-lrsjng/mkr-a0a060.svg?style=flat-square
 [npm-img]: http://img.shields.io/badge/npm-mkr-a0a060.svg?style=flat-square
 
 [npm-v-img]: http://img.shields.io/npm/v/mkr.svg?style=flat-square
 [npm-dm-img]: http://img.shields.io/npm/dm/mkr.svg?style=flat-square
-[npm-l-img]: http://img.shields.io/npm/l/mkr.svg?style=flat-square
 [david-img]: http://img.shields.io/david/lrsjng/mkr.svg?style=flat-square
 [travis-img]: http://img.shields.io/travis/lrsjng/mkr.svg?style=flat-square
 
