@@ -1,6 +1,6 @@
 {
   "name": "mkr",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "target and task based build tool",
   "homepage": "http://larsjung.de/mkr/",
   "bugs": "https://github.com/lrsjng/mkr/issues",
@@ -20,7 +20,6 @@
   "dependencies": {
     "chalk": "~0.5.1",
     "commander": "~2.3.0",
-    "lodash": "~2.4.1",
     "q": "~1.0.1"
   },
   "devDependencies": {

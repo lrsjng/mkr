@@ -1,8 +1,8 @@
 /*jshint node: true */
 /*global describe, before, beforeEach, it */
+'use strict';
 
 
-var _ = require('lodash');
 var assert = require('assert');
 var q = require('q');
 var Task = require('../lib/Task');
@@ -20,7 +20,7 @@ describe('Task', function () {
 
     it('is function', function () {
 
-        assert.ok(_.isFunction(Task));
+        assert.strictEqual(typeof(Task), 'function');
     });
 
     it('expects 1 argument', function () {
@@ -58,7 +58,7 @@ describe('Task', function () {
         it('is function', function () {
 
             var task = new Task();
-            assert.ok(_.isFunction(task.run));
+            assert.strictEqual(typeof(task.run), 'function');
         });
 
         it('expects no arguments', function () {
