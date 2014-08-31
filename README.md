@@ -3,8 +3,8 @@
 [![license][license-img]][github] [![web][web-img]][web] [![github][github-img]][github] [![npm][npm-img]][npm]  
 [![version][npm-v-img]][npm] [![downloads][npm-dm-img]][npm] [![dependencies status][gemnasium-img]][gemnasium] [![build status][travis-img]][travis]
 
-Target and task based build tool. This node module is ment to be installed
-locally. For a command line trigger have a look at [`mkr-global`][mkr-global].
+Target and task based build tool for Node.js. It is meant to be installed
+locally. For a command line trigger have a look at [mkr-global][mkr-global].
 
 
 ## Install

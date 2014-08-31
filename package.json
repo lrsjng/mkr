@@ -1,7 +1,7 @@
 {
   "name": "mkr",
-  "version": "0.6.0",
-  "description": "target and task based build tool",
+  "version": "0.6.1",
+  "description": "target and task based build tool for Node.js",
   "homepage": "http://larsjung.de/mkr/",
   "bugs": "https://github.com/lrsjng/mkr/issues",
   "author": "Lars Jung <lrsjng@gmail.com> (http://larsjung.de)",
