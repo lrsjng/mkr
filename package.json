@@ -1,6 +1,6 @@
 {
   "name": "mkr",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "description": "target and task based build tool for Node.js",
   "homepage": "http://larsjung.de/mkr/",
   "bugs": "https://github.com/lrsjng/mkr/issues",
@@ -24,9 +24,12 @@
     "q": "~1.4.1"
   },
   "devDependencies": {
-    "mocha": "~2.2.5"
+    "chai": "~2.3.0",
+    "mocha": "~2.2.5",
+    "sinon": "~1.14.1"
   },
   "engines": {
-    "node": ">=0.10"
+    "node": ">=0.10",
+    "iojs": ">= 1.0.0"
   }
 }
