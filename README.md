@@ -9,7 +9,9 @@ locally. For a command line trigger have a look at [mkr-global][mkr-global].
 
 ## Install
 
-    > npm install mkr
+~~~sh
+> npm install mkr
+~~~
 
 
 ## License

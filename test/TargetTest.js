@@ -1,5 +1,3 @@
-/*jshint node: true */
-/*global describe, before, beforeEach, it */
 'use strict';
 
 
@@ -21,7 +19,7 @@ describe('Target', function () {
 
     it('is function', function () {
 
-        assert.strictEqual(typeof(Target), 'function');
+        assert.strictEqual(typeof Target, 'function');
     });
 
     it('expects 3 argument', function () {
@@ -58,7 +56,7 @@ describe('Target', function () {
         it('is function', function () {
 
             var target = new Target();
-            assert.strictEqual(typeof(target.task), 'function');
+            assert.strictEqual(typeof target.task, 'function');
         });
 
         it('expects 1 argument', function () {
@@ -113,7 +111,7 @@ describe('Target', function () {
         it('is function', function () {
 
             var target = new Target();
-            assert.strictEqual(typeof(target.run), 'function');
+            assert.strictEqual(typeof target.run, 'function');
         });
 
         it('expects 1 argument', function () {
