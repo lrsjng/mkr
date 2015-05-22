@@ -1,6 +1,6 @@
 {
   "name": "mkr",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "description": "target and task based build tool for Node.js",
   "homepage": "http://larsjung.de/mkr/",
   "bugs": "https://github.com/lrsjng/mkr/issues",
@@ -30,6 +30,6 @@
   },
   "engines": {
     "node": ">=0.10",
-    "iojs": ">= 1.0.0"
+    "iojs": ">=1.0.0"
   }
 }
