@@ -115,12 +115,11 @@ describe('Target', function () {
                 assert.isTrue(fn2.calledOnce);
                 assert.isTrue(fn3.calledOnce);
                 assert.isTrue(fn1.calledBefore(fn2));
-                assert.isTrue(fn1.calledBefore(fn3));
                 assert.isTrue(fn2.calledBefore(fn3));
             });
         });
 
-        it('runs reporter callbacks in right order', function () {
+        it('runs reporter callbacks in right order and with right arguments', function () {
             var reporter = {
                     beforeTarget: sinon.spy(),
                     afterTarget: sinon.spy()
@@ -141,16 +140,12 @@ describe('Target', function () {
                 assert.isTrue(fn3.calledOnce);
 
                 assert.isTrue(reporter.beforeTarget.calledBefore(fn1));
-                assert.isTrue(reporter.beforeTarget.calledBefore(fn2));
-                assert.isTrue(reporter.beforeTarget.calledBefore(fn3));
-
                 assert.isTrue(fn1.calledBefore(fn2));
-                assert.isTrue(fn1.calledBefore(fn3));
                 assert.isTrue(fn2.calledBefore(fn3));
+                assert.isTrue(fn3.calledBefore(reporter.afterTarget));
 
-                assert.isTrue(reporter.afterTarget.calledAfter(fn1));
-                assert.isTrue(reporter.afterTarget.calledAfter(fn2));
-                assert.isTrue(reporter.afterTarget.calledAfter(fn3));
+                assert.deepEqual(reporter.beforeTarget.lastCall.args, [target]);
+                assert.deepEqual(reporter.afterTarget.lastCall.args, []);
             });
         });
     });
