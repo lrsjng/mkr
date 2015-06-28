@@ -15,8 +15,8 @@
     "mkr": "./bin/mkr.js"
   },
   "scripts": {
-    "test": "mocha --recursive test",
-    "coverage": "istanbul cover _mocha -- -R dot --recursive test"
+    "test": "mocha",
+    "coverage": "istanbul cover _mocha -- -R dot"
   },
   "dependencies": {
     "chalk": "^1.0.0",
