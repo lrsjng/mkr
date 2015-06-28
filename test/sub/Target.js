@@ -101,7 +101,7 @@ describe('Target', function () {
             assert.isTrue(q.isPromise(target.run()));
         });
 
-        it('runs all tasks in sequence', function () {
+        it('runs tasks in sequence', function () {
             var fn1 = sinon.spy();
             var fn2 = sinon.spy();
             var fn3 = sinon.spy();
@@ -119,7 +119,7 @@ describe('Target', function () {
             });
         });
 
-        it('runs reporter callbacks in right order and with right arguments', function () {
+        it('runs reporter correct', function () {
             var reporter = {
                     beforeTarget: sinon.spy(),
                     afterTarget: sinon.spy()
