@@ -1,12 +1,8 @@
 {
-    // "disallowCommaBeforeLineBreak": true,
-    // "disallowDanglingUnderscores": {
-    //     "allExcept": ["_exception", "_obj" , "_private"]
-    // },
     "disallowEmptyBlocks": true,
     "disallowImplicitTypeConversion": [
         "binary",
-        "boolean",
+        //"boolean",
         "numeric",
         "string"
     ],
@@ -21,7 +17,6 @@
     "disallowMultipleSpaces": true,
     "disallowMultipleVarDecl": true,
     "disallowNewlineBeforeBlockStatements": true,
-    // "disallowPaddingNewlinesInBlock": true,
     "disallowQuotedKeysInObjects": true,
     "disallowSpaceAfterObjectKeys": true,
     "disallowSpaceAfterPrefixUnaryOperators": [
@@ -43,9 +38,6 @@
     "disallowTrailingComma": true,
     "disallowTrailingWhitespace": true,
     "disallowYodaConditions": true,
-    // "maximumLineLength": 80,
-    // "requireBlocksOnNewline": true,
-    // "requireCamelCaseOrUpperCaseIdentifiers": true,
     "requireCapitalizedConstructors": true,
     "requireCommaBeforeLineBreak": true,
     "requireCurlyBraces": [
@@ -61,9 +53,6 @@
     ],
     "requireDollarBeforejQueryAssignment": true,
     "requireDotNotation": true,
-    // "requireKeywordsOnNewLine": [
-    //     "else"
-    // ],
     "requireLineBreakAfterVariableAssignment": true,
     "requireLineFeedAtFileEnd": true,
     "requireOperatorBeforeLineBreak": [

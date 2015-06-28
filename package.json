@@ -1,7 +1,7 @@
 {
   "name": "mkr",
   "version": "0.8.5",
-  "description": "target and task based build tool for Node.js",
+  "description": "Target and task based build tool for Node.js.",
   "homepage": "http://larsjung.de/mkr/",
   "bugs": "https://github.com/lrsjng/mkr/issues",
   "author": "Lars Jung <lrsjng@gmail.com> (http://larsjung.de)",
@@ -15,18 +15,20 @@
     "mkr": "./bin/mkr.js"
   },
   "scripts": {
-    "test": "mocha --recursive test"
+    "test": "mocha --recursive test",
+    "coverage": "istanbul cover _mocha -- -R dot --recursive test"
   },
   "dependencies": {
-    "chalk": "~1.0.0",
-    "commander": "~2.8.1",
-    "minimist": "~1.1.1",
-    "q": "~1.4.1"
+    "chalk": "^1.0.0",
+    "commander": "^2.8.1",
+    "minimist": "^1.1.1",
+    "q": "^1.4.1"
   },
   "devDependencies": {
-    "chai": "~2.3.0",
-    "mocha": "~2.2.5",
-    "sinon": "~1.14.1"
+    "chai": "^3.0.0",
+    "istanbul": "^0.3.17",
+    "mocha": "^2.2.5",
+    "sinon": "^1.15.4"
   },
   "engines": {
     "node": ">=0.10",
