@@ -4,7 +4,6 @@ var insp = require('util').inspect;
 var assert = require('chai').assert;
 var path = require('path');
 var _ = require('lodash');
-// var q = require('q');
 var sinon = require('sinon');
 var Mkr = require('../../lib/Mkr');
 var Reporter = require('../../lib/Reporter');
