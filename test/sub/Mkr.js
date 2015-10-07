@@ -129,7 +129,8 @@ describe('Mkr', function () {
                 listDefaults: false,
                 listTargets: false,
                 showTargets: false,
-                targets: []
+                targets: [],
+                useBabel: false
             }],
             [[], {
                 args: {},
@@ -137,7 +138,8 @@ describe('Mkr', function () {
                 listDefaults: false,
                 listTargets: false,
                 showTargets: false,
-                targets: []
+                targets: [],
+                useBabel: false
             }],
             [['a'], {
                 args: {},
@@ -145,7 +147,8 @@ describe('Mkr', function () {
                 listDefaults: false,
                 listTargets: false,
                 showTargets: false,
-                targets: ['a']
+                targets: ['a'],
+                useBabel: false
             }],
             [[':a'], {
                 args: {a: true},
@@ -153,7 +156,8 @@ describe('Mkr', function () {
                 listDefaults: false,
                 listTargets: false,
                 showTargets: false,
-                targets: []
+                targets: [],
+                useBabel: false
             }],
             [['a', ':b', 'b', ':a'], {
                 args: {a: true, b: true},
@@ -161,7 +165,8 @@ describe('Mkr', function () {
                 listDefaults: false,
                 listTargets: false,
                 showTargets: false,
-                targets: ['a', 'b']
+                targets: ['a', 'b'],
+                useBabel: false
             }],
             [['-f', 'test'], {
                 args: {},
@@ -169,7 +174,8 @@ describe('Mkr', function () {
                 listDefaults: false,
                 listTargets: false,
                 showTargets: false,
-                targets: []
+                targets: [],
+                useBabel: false
             }],
             [['-t'], {
                 args: {},
@@ -177,7 +183,8 @@ describe('Mkr', function () {
                 listDefaults: false,
                 listTargets: false,
                 showTargets: true,
-                targets: []
+                targets: [],
+                useBabel: false
             }],
             [['-T'], {
                 args: {},
@@ -185,7 +192,8 @@ describe('Mkr', function () {
                 listDefaults: false,
                 listTargets: true,
                 showTargets: false,
-                targets: []
+                targets: [],
+                useBabel: false
             }],
             [['-D'], {
                 args: {},
@@ -193,7 +201,17 @@ describe('Mkr', function () {
                 listDefaults: true,
                 listTargets: false,
                 showTargets: false,
-                targets: []
+                targets: [],
+                useBabel: false
+            }],
+            [['-b'], {
+                args: {},
+                file: 'mkrfile.js',
+                listDefaults: false,
+                listTargets: false,
+                showTargets: false,
+                targets: [],
+                useBabel: true
             }]
         ], function (x) {
             var arg = x[0];
