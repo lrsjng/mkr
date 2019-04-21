@@ -1,201 +1,186 @@
-'use strict';
+const insp = require('util').inspect;
+const sinon = require('sinon');
+const {test, assert} = require('scar');
+const Reporter = require('../../lib/Reporter');
 
-var insp = require('util').inspect;
-var assert = require('chai').assert;
-var sinon = require('sinon');
-var _ = require('lodash');
-var Reporter = require('../../lib/Reporter');
 
-describe('Reporter', function () {
+test('Reporter is function', () => {
+    assert.is_fun(Reporter);
+});
 
-    it('is function', function () {
-        assert.isFunction(Reporter);
+test('Reporter expects no arguments', () => {
+    assert.len(Reporter, 0);
+});
+
+test('Reporter constructor without arguments', () => {
+    const reporter = new Reporter();
+    assert.match(reporter._prefix, /\[mkr\]/);
+});
+
+
+test('Reporter _formatArgs() is function', () => {
+    const reporter = new Reporter();
+    assert.is_fun(reporter._formatArgs);
+});
+
+test('Reporter _formatArgs() expects 1 argument', () => {
+    const reporter = new Reporter();
+    assert.len(reporter._formatArgs, 1);
+});
+
+[
+    [undefined, ''],
+    [{}, ''],
+    [{a: 1}, 'a=1'],
+    [{a: 1, b: 2}, 'a=1, b=2']
+].forEach(x => {
+    const arg = x[0];
+    const exp = x[1];
+
+    test('Reporter _formatArgs() ._formatArgs(' + insp(arg) + ')  ->  ' + insp(exp), () => {
+        const reporter = new Reporter();
+        assert.equal(reporter._formatArgs(arg), exp);
     });
+});
 
-    it('expects no arguments', function () {
-        assert.lengthOf(Reporter, 0);
+
+test('Reporter _formatTargets() is function', () => {
+    const reporter = new Reporter();
+    assert.is_fun(reporter._formatTargets);
+});
+
+test('Reporter _formatTargets() expects 1 argument', () => {
+    const reporter = new Reporter();
+    assert.len(reporter._formatTargets, 1);
+});
+
+[
+    [undefined, ''],
+    [[], ''],
+    [[{name: 'a'}], 'a'],
+    [[{name: 'a'}, {name: 'b'}], 'a, b']
+].forEach(x => {
+    const arg = x[0];
+    const exp = x[1];
+
+    test('Reporter _formatTargets() ._formatTargets(' + insp(arg) + ')  ->  ' + insp(exp), () => {
+        const reporter = new Reporter();
+        assert.equal(reporter._formatTargets(arg), exp);
     });
+});
 
-    it('constructor without arguments', function () {
-        var reporter = new Reporter();
-        assert.match(reporter._prefix, /\[mkr\]/);
-    });
 
-    describe('._formatArgs()', function () {
+test('Reporter _getTime() is function', () => {
+    const reporter = new Reporter();
+    assert.is_fun(reporter._getTime);
+});
 
-        it('is function', function () {
-            var reporter = new Reporter();
-            assert.isFunction(reporter._formatArgs);
-        });
+test('Reporter _getTime() expects no arguments', () => {
+    const reporter = new Reporter();
+    assert.len(reporter._getTime, 0);
+});
 
-        it('expects 1 argument', function () {
-            var reporter = new Reporter();
-            assert.lengthOf(reporter._formatArgs, 1);
-        });
+test('Reporter _getTime() returns integer', () => {
+    const reporter = new Reporter();
+    const time = reporter._getTime();
+    assert.is_num(time);
+    assert.equal(time % 1, 0);
+});
 
-        _.each([
-            [undefined, ''],
-            [{}, ''],
-            [{a: 1}, 'a=1'],
-            [{a: 1, b: 2}, 'a=1, b=2']
-        ], function (x) {
-            var arg = x[0];
-            var exp = x[1];
 
-            it('._formatArgs(' + insp(arg) + ')  ->  ' + insp(exp), function () {
-                var reporter = new Reporter();
-                assert.strictEqual(reporter._formatArgs(arg), exp);
-            });
-        });
-    });
+test('Reporter onError() is function', () => {
+    const reporter = new Reporter();
+    assert.is_fun(reporter.onError);
+});
 
-    describe('._formatTargets()', function () {
+test('Reporter onError() expects 1 argument', () => {
+    const reporter = new Reporter();
+    assert.len(reporter.onError, 1);
+});
 
-        it('is function', function () {
-            var reporter = new Reporter();
-            assert.isFunction(reporter._formatTargets);
-        });
+test('Reporter onError() no argument', () => {
+    const reporter = new Reporter();
+    reporter.writeLine = sinon.spy();
+    reporter.log = sinon.spy();
 
-        it('expects 1 argument', function () {
-            var reporter = new Reporter();
-            assert.lengthOf(reporter._formatTargets, 1);
-        });
+    assert.is_undef(reporter.onError());
+    assert.is_true(reporter.writeLine.calledOnce);
+    assert.is_true(reporter.log.calledOnce);
+});
 
-        _.each([
-            [undefined, ''],
-            [[], ''],
-            [[{name: 'a'}], 'a'],
-            [[{name: 'a'}, {name: 'b'}], 'a, b']
-        ], function (x) {
-            var arg = x[0];
-            var exp = x[1];
+test('Reporter onError() string argument', () => {
+    const reporter = new Reporter();
+    reporter.writeLine = sinon.spy();
+    reporter.log = sinon.spy();
 
-            it('._formatTargets(' + insp(arg) + ')  ->  ' + insp(exp), function () {
-                var reporter = new Reporter();
-                assert.strictEqual(reporter._formatTargets(arg), exp);
-            });
-        });
-    });
+    assert.is_undef(reporter.onError('test'));
+    assert.is_true(reporter.writeLine.calledOnce);
+    assert.is_true(reporter.log.calledOnce);
+    assert.match(reporter.log.lastCall.args[0], /test/);
+});
 
-    describe('._getTime()', function () {
+test('Reporter onError() object argument', () => {
+    const reporter = new Reporter();
+    reporter.writeLine = sinon.spy();
+    reporter.log = sinon.spy();
 
-        it('is function', function () {
-            var reporter = new Reporter();
-            assert.isFunction(reporter._getTime);
-        });
+    assert.is_undef(reporter.onError({}));
+    assert.is_true(reporter.writeLine.calledOnce);
+    assert.is_true(reporter.log.calledOnce);
+    assert.match(reporter.log.lastCall.args[0], /object/);
+});
 
-        it('expects no arguments', function () {
-            var reporter = new Reporter();
-            assert.lengthOf(reporter._getTime, 0);
-        });
+test('Reporter onError() object argument with stack', () => {
+    const reporter = new Reporter();
+    reporter.writeLine = sinon.spy();
+    reporter.log = sinon.spy();
 
-        it('returns integer', function () {
-            var reporter = new Reporter();
-            var time = reporter._getTime();
-            assert.isNumber(time);
-            assert.strictEqual(time % 1, 0);
-        });
-    });
+    assert.is_undef(reporter.onError({stack: 'test'}));
+    assert.is_true(reporter.writeLine.calledOnce);
+    assert.is_true(reporter.log.calledOnce);
+    assert.match(reporter.log.lastCall.args[0], /test/);
+});
 
-    describe('.onError()', function () {
+test('Reporter onError() no argument with time', () => {
+    const reporter = new Reporter();
+    reporter.writeLine = sinon.spy();
+    reporter.log = sinon.spy();
+    reporter._suiteTime = 1;
 
-        it('is function', function () {
-            var reporter = new Reporter();
-            assert.isFunction(reporter.onError);
-        });
+    assert.is_undef(reporter.onError());
+    assert.is_true(reporter.writeLine.calledOnce);
+    assert.is_true(reporter.log.calledTwice);
+});
 
-        it('expects 1 argument', function () {
-            var reporter = new Reporter();
-            assert.lengthOf(reporter.onError, 1);
-        });
 
-        it('no argument', function () {
-            var reporter = new Reporter();
-            reporter.writeLine = sinon.spy();
-            reporter.log = sinon.spy();
+test('Reporter beforeSuite() is function', () => {
+    const reporter = new Reporter();
+    assert.is_fun(reporter.beforeSuite);
+});
 
-            assert.isUndefined(reporter.onError());
-            assert.isTrue(reporter.writeLine.calledOnce);
-            assert.isTrue(reporter.log.calledOnce);
-        });
+test('Reporter beforeSuite() expects 2 argument', () => {
+    const reporter = new Reporter();
+    assert.len(reporter.beforeSuite, 2);
+});
 
-        it('string argument', function () {
-            var reporter = new Reporter();
-            reporter.writeLine = sinon.spy();
-            reporter.log = sinon.spy();
+test('Reporter beforeSuite() throws if no argument', () => {
+    const reporter = new Reporter();
+    reporter.log = sinon.spy();
+    assert.throws(() => { reporter.beforeSuite(); });
+});
 
-            assert.isUndefined(reporter.onError('test'));
-            assert.isTrue(reporter.writeLine.calledOnce);
-            assert.isTrue(reporter.log.calledOnce);
-            assert.match(reporter.log.lastCall.args[0], /test/);
-        });
+test('Reporter beforeSuite() empty suite.args', () => {
+    const reporter = new Reporter();
+    reporter.log = sinon.spy();
 
-        it('object argument', function () {
-            var reporter = new Reporter();
-            reporter.writeLine = sinon.spy();
-            reporter.log = sinon.spy();
+    assert.is_undef(reporter.beforeSuite({args: {}}));
+    assert.is_true(reporter.log.calledOnce);
+});
 
-            assert.isUndefined(reporter.onError({}));
-            assert.isTrue(reporter.writeLine.calledOnce);
-            assert.isTrue(reporter.log.calledOnce);
-            assert.match(reporter.log.lastCall.args[0], /object/);
-        });
+test('Reporter beforeSuite() suite.args', () => {
+    const reporter = new Reporter();
+    reporter.log = sinon.spy();
 
-        it('object argument with stack', function () {
-            var reporter = new Reporter();
-            reporter.writeLine = sinon.spy();
-            reporter.log = sinon.spy();
-
-            assert.isUndefined(reporter.onError({stack: 'test'}));
-            assert.isTrue(reporter.writeLine.calledOnce);
-            assert.isTrue(reporter.log.calledOnce);
-            assert.match(reporter.log.lastCall.args[0], /test/);
-        });
-
-        it('no argument with time', function () {
-            var reporter = new Reporter();
-            reporter.writeLine = sinon.spy();
-            reporter.log = sinon.spy();
-            reporter._suiteTime = 1;
-
-            assert.isUndefined(reporter.onError());
-            assert.isTrue(reporter.writeLine.calledOnce);
-            assert.isTrue(reporter.log.calledTwice);
-        });
-    });
-
-    describe('.beforeSuite()', function () {
-
-        it('is function', function () {
-            var reporter = new Reporter();
-            assert.isFunction(reporter.beforeSuite);
-        });
-
-        it('expects 2 argument', function () {
-            var reporter = new Reporter();
-            assert.lengthOf(reporter.beforeSuite, 2);
-        });
-
-        it('throws if no argument', function () {
-            var reporter = new Reporter();
-            reporter.log = sinon.spy();
-            assert.throws(function () { reporter.beforeSuite(); });
-        });
-
-        it('empty suite.args', function () {
-            var reporter = new Reporter();
-            reporter.log = sinon.spy();
-
-            assert.isUndefined(reporter.beforeSuite({args: {}}));
-            assert.isTrue(reporter.log.calledOnce);
-        });
-
-        it('suite.args', function () {
-            var reporter = new Reporter();
-            reporter.log = sinon.spy();
-
-            assert.isUndefined(reporter.beforeSuite({args: {a: true}}));
-            assert.isTrue(reporter.log.calledOnce);
-        });
-    });
+    assert.is_undef(reporter.beforeSuite({args: {a: true}}));
+    assert.is_true(reporter.log.calledOnce);
 });

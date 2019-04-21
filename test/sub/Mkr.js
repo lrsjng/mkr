@@ -1,241 +1,228 @@
-'use strict';
+const insp = require('util').inspect;
+const path = require('path');
+const {test, assert} = require('scar');
+const Mkr = require('../../lib/Mkr');
+const Reporter = require('../../lib/Reporter');
 
-var insp = require('util').inspect;
-var assert = require('chai').assert;
-var path = require('path');
-var _ = require('lodash');
-var sinon = require('sinon');
-var Mkr = require('../../lib/Mkr');
-var Reporter = require('../../lib/Reporter');
 
-function MockStream() { this.clear(); }
-MockStream.prototype.clear = function () { this.spy = sinon.spy(); this.content = ''; };
-MockStream.prototype.write = function (sequence) { this.spy(sequence); this.content += sequence; };
+class MockStream {
+    constructor() {
+        this.content = '';
+    }
 
-var out = new MockStream();
-var silentReporter = new Reporter();
-silentReporter._stream = out;
+    write(sequence) {
+        this.content += sequence;
+    }
+}
 
-describe('Mkr', function () {
 
-    beforeEach(function () {
-        out.clear();
+test('Mkr is object', () => {
+    assert.is_obj(Mkr);
+});
+
+test('Mkr has the right properties', () => {
+    assert.deepEqual(Object.keys(Mkr).sort(), [
+        'run',
+        'clp',
+        'cli'
+    ].sort());
+});
+
+
+test('Mkr run() is function', () => {
+    assert.is_fun(Mkr.run);
+});
+
+test('Mkr run() expects 1 argument', () => {
+    assert.len(Mkr.run, 1);
+});
+
+test('Mkr run() throws on file not found', () => {
+    const out = new MockStream();
+    const rep = new Reporter();
+    rep._stream = out;
+    return Mkr.run({
+        file: path.join(__dirname, '../assets/none'),
+        reporter: rep
+    }).catch(err => {
+        assert.match(err, /file not found/);
+        assert.match(out.content, /file not found/);
     });
+});
 
-    it('is object', function () {
-        assert.isObject(Mkr);
+test('Mkr run() throws on file not found - reporter', () => {
+    return Mkr.run({
+        file: path.join(__dirname, '../assets/none'),
+        reporter: {}
+    }).catch(err => {
+        assert.match(err, /file not found/);
     });
+});
 
-    it('has the right properties', function () {
-        assert.deepEqual(_.keys(Mkr).sort(), [
-            'run',
-            'clp',
-            'cli'
-        ].sort());
+test('Mkr run() throws on file not found', () => {
+    const out = new MockStream();
+    const rep = new Reporter();
+    rep._stream = out;
+    return Mkr.run({
+        reporter: rep
+    }).catch(err => {
+        assert.match(err, /file not found/);
+        assert.match(out.content, /file not found/);
     });
+});
 
-    describe('.run()', function () {
-
-        it('is function', function () {
-            assert.isFunction(Mkr.run);
-        });
-
-        it('expects 1 argument', function () {
-            assert.lengthOf(Mkr.run, 1);
-        });
-
-        it('throws on file not found', function () {
-            return Mkr.run({
-                file: path.join(__dirname, '../assets/none'),
-                reporter: silentReporter
-            }).catch(function (err) {
-                assert.match(err, /file not found/);
-                assert.match(out.content, /file not found/);
-            });
-        });
-
-        it('throws on file not found - reporter', function () {
-            return Mkr.run({
-                file: path.join(__dirname, '../assets/none'),
-                reporter: {}
-            }).catch(function (err) {
-                assert.match(err, /file not found/);
-            });
-        });
-
-        it('throws on file not found', function () {
-            return Mkr.run({
-                reporter: silentReporter
-            }).catch(function (err) {
-                assert.match(err, /file not found/);
-                assert.match(out.content, /file not found/);
-            });
-        });
-
-        it('works', function () {
-            return Mkr.run({
-                file: path.join(__dirname, '../assets/mkrfile.js'),
-                reporter: silentReporter
-            }).then(function () {
-                assert.match(out.content, /successful in \d\.\d+ seconds/);
-            });
-        });
-
-        it('works', function () {
-            return Mkr.run({
-                file: path.join(__dirname, '../assets/mkrfile.js'),
-                showTargets: true,
-                reporter: silentReporter
-            }).then(function () {
-                assert.match(out.content, /file:.*\/assets\/mkrfile\.js[\s\S]+defaults: \[t2\]/);
-            });
-        });
-
-        it('works', function () {
-            return Mkr.run({
-                file: path.join(__dirname, '../assets/mkrfile.js'),
-                listTargets: true,
-                reporter: silentReporter
-            }).then(function () {
-                assert.strictEqual(out.content, 't0\nt1\nt2\n');
-            });
-        });
-
-        it('works', function () {
-            return Mkr.run({
-                file: path.join(__dirname, '../assets/mkrfile.js'),
-                listDefaults: true,
-                reporter: silentReporter
-            }).then(function () {
-                assert.strictEqual(out.content, 't2\n');
-            });
-        });
+test('Mkr run() works', () => {
+    const out = new MockStream();
+    const rep = new Reporter();
+    rep._stream = out;
+    return Mkr.run({
+        file: path.join(__dirname, '../assets/mkrfile.js'),
+        reporter: rep
+    }).then(() => {
+        assert.match(out.content, /successful in \d\.\d+ seconds/);
     });
+});
 
-    describe('.clp()', function () {
-
-        it('is function', function () {
-            assert.isFunction(Mkr.clp);
-        });
-
-        it('expects 1 argument', function () {
-            assert.lengthOf(Mkr.clp, 1);
-        });
-
-        _.each([
-            [undefined, {
-                args: {},
-                file: 'mkrfile.js',
-                listDefaults: false,
-                listTargets: false,
-                showTargets: false,
-                targets: [],
-                useBabel: false
-            }],
-            [[], {
-                args: {},
-                file: 'mkrfile.js',
-                listDefaults: false,
-                listTargets: false,
-                showTargets: false,
-                targets: [],
-                useBabel: false
-            }],
-            [['a'], {
-                args: {},
-                file: 'mkrfile.js',
-                listDefaults: false,
-                listTargets: false,
-                showTargets: false,
-                targets: ['a'],
-                useBabel: false
-            }],
-            [[':a'], {
-                args: {a: true},
-                file: 'mkrfile.js',
-                listDefaults: false,
-                listTargets: false,
-                showTargets: false,
-                targets: [],
-                useBabel: false
-            }],
-            [['a', ':b', 'b', ':a'], {
-                args: {a: true, b: true},
-                file: 'mkrfile.js',
-                listDefaults: false,
-                listTargets: false,
-                showTargets: false,
-                targets: ['a', 'b'],
-                useBabel: false
-            }],
-            [['-f', 'test'], {
-                args: {},
-                file: 'test',
-                listDefaults: false,
-                listTargets: false,
-                showTargets: false,
-                targets: [],
-                useBabel: false
-            }],
-            [['-t'], {
-                args: {},
-                file: 'mkrfile.js',
-                listDefaults: false,
-                listTargets: false,
-                showTargets: true,
-                targets: [],
-                useBabel: false
-            }],
-            [['-T'], {
-                args: {},
-                file: 'mkrfile.js',
-                listDefaults: false,
-                listTargets: true,
-                showTargets: false,
-                targets: [],
-                useBabel: false
-            }],
-            [['-D'], {
-                args: {},
-                file: 'mkrfile.js',
-                listDefaults: true,
-                listTargets: false,
-                showTargets: false,
-                targets: [],
-                useBabel: false
-            }],
-            [['-b'], {
-                args: {},
-                file: 'mkrfile.js',
-                listDefaults: false,
-                listTargets: false,
-                showTargets: false,
-                targets: [],
-                useBabel: true
-            }]
-        ], function (x) {
-            var arg = x[0];
-            var exp = x[1];
-
-            it('.clp(' + insp(arg) + ')', function () {
-                if (_.isArray(arg)) {
-                    arg.unshift('PRG');
-                    arg.unshift('NODE');
-                }
-                var res = Mkr.clp(arg);
-                assert.deepEqual(res, exp);
-            });
-        });
+test('Mkr run() works', () => {
+    const out = new MockStream();
+    const rep = new Reporter();
+    rep._stream = out;
+    return Mkr.run({
+        file: path.join(__dirname, '../assets/mkrfile.js'),
+        showTargets: true,
+        reporter: rep
+    }).then(() => {
+        assert.match(out.content, /file:.*\/assets\/mkrfile\.js[\s\S]+defaults: \[t2\]/);
     });
+});
 
-    describe('.cli()', function () {
-
-        it('is function', function () {
-            assert.isFunction(Mkr.cli);
-        });
-
-        it('expects no arguments', function () {
-            assert.lengthOf(Mkr.cli, 0);
-        });
+test('Mkr run() works', () => {
+    const out = new MockStream();
+    const rep = new Reporter();
+    rep._stream = out;
+    return Mkr.run({
+        file: path.join(__dirname, '../assets/mkrfile.js'),
+        listTargets: true,
+        reporter: rep
+    }).then(() => {
+        assert.equal(out.content, 't0\nt1\nt2\n');
     });
+});
+
+test('Mkr run() works', () => {
+    const out = new MockStream();
+    const rep = new Reporter();
+    rep._stream = out;
+    return Mkr.run({
+        file: path.join(__dirname, '../assets/mkrfile.js'),
+        listDefaults: true,
+        reporter: rep
+    }).then(() => {
+        assert.equal(out.content, 't2\n');
+    });
+});
+
+
+test('Mkr clp() is function', () => {
+    assert.is_fun(Mkr.clp);
+});
+
+test('Mkr clp() expects 1 argument', () => {
+    assert.len(Mkr.clp, 1);
+});
+
+[
+    // [undefined, {
+    //     args: {},
+    //     file: 'mkrfile.js',
+    //     listDefaults: false,
+    //     listTargets: false,
+    //     showTargets: false,
+    //     targets: []
+    // }],
+    [[], {
+        args: {},
+        file: 'mkrfile.js',
+        listDefaults: false,
+        listTargets: false,
+        showTargets: false,
+        targets: []
+    }],
+    [['a'], {
+        args: {},
+        file: 'mkrfile.js',
+        listDefaults: false,
+        listTargets: false,
+        showTargets: false,
+        targets: ['a']
+    }],
+    [[':a'], {
+        args: {a: true},
+        file: 'mkrfile.js',
+        listDefaults: false,
+        listTargets: false,
+        showTargets: false,
+        targets: []
+    }],
+    [['a', ':b', 'b', ':a'], {
+        args: {a: true, b: true},
+        file: 'mkrfile.js',
+        listDefaults: false,
+        listTargets: false,
+        showTargets: false,
+        targets: ['a', 'b']
+    }],
+    [['-f', 'test'], {
+        args: {},
+        file: 'test',
+        listDefaults: false,
+        listTargets: false,
+        showTargets: false,
+        targets: []
+    }],
+    [['-t'], {
+        args: {},
+        file: 'mkrfile.js',
+        listDefaults: false,
+        listTargets: false,
+        showTargets: true,
+        targets: []
+    }],
+    [['-T'], {
+        args: {},
+        file: 'mkrfile.js',
+        listDefaults: false,
+        listTargets: true,
+        showTargets: false,
+        targets: []
+    }],
+    [['-D'], {
+        args: {},
+        file: 'mkrfile.js',
+        listDefaults: true,
+        listTargets: false,
+        showTargets: false,
+        targets: []
+    }]
+].forEach(x => {
+    const arg = x[0];
+    const exp = x[1];
+
+    test('Mkr clp() .clp(' + insp(arg) + ')', () => {
+        if (Array.isArray(arg)) {
+            arg.unshift('PRG');
+            arg.unshift('NODE');
+        }
+        const res = Mkr.clp(arg);
+        assert.deepEqual(res, exp);
+    });
+});
+
+
+test('Mkr cli() is function', () => {
+    assert.is_fun(Mkr.cli);
+});
+
+test('Mkr cli() expects no arguments', () => {
+    assert.len(Mkr.cli, 0);
 });

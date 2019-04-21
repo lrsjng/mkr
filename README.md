@@ -1,23 +1,16 @@
 # mkr
 
 [![license][license-img]][github] [![web][web-img]][web] [![github][github-img]][github] [![npm][npm-img]][npm]  
-[![version][npm-v-img]][npm] [![downloads][npm-dm-img]][npm] [![dependencies status][gemnasium-img]][gemnasium] [![build status][travis-img]][travis]
+[![version][npm-v-img]][npm] [![downloads][npm-dm-img]][npm] [![build status][travis-img]][travis]
 
 Target and task based build tool for Node.js. It is meant to be installed
 locally. For a command line trigger have a look at [mkr-global][mkr-global].
 
 
-## Install
-
-~~~sh
-> npm install mkr
-~~~
-
-
 ## License
 The MIT License (MIT)
 
-Copyright (c) 2015 Lars Jung (http://larsjung.de)
+Copyright (c) 2019 Lars Jung (https://larsjung.de)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,10 +31,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
-[web]: http://larsjung.de/mkr/
+[web]: https://larsjung.de/mkr/
 [github]: https://github.com/lrsjng/mkr
 [npm]: https://www.npmjs.org/package/mkr
-[gemnasium]: https://gemnasium.com/lrsjng/mkr
 [travis]: https://travis-ci.org/lrsjng/mkr
 
 [license-img]: https://img.shields.io/badge/license-MIT-a0a060.svg?style=flat-square
@@ -51,7 +43,6 @@ THE SOFTWARE.
 
 [npm-v-img]: https://img.shields.io/npm/v/mkr.svg?style=flat-square
 [npm-dm-img]: https://img.shields.io/npm/dm/mkr.svg?style=flat-square
-[gemnasium-img]: https://img.shields.io/gemnasium/lrsjng/mkr.svg?style=flat-square
 [travis-img]: https://img.shields.io/travis/lrsjng/mkr.svg?style=flat-square
 
 [mkr-global]: https://github.com/lrsjng/mkr-global

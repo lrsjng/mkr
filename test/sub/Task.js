@@ -1,13 +1,12 @@
-'use strict';
+const sinon = require('sinon');
+const {test, assert} = require('scar');
+const Task = require('../../lib/Task');
 
-var assert = require('chai').assert;
-var q = require('q');
-var sinon = require('sinon');
-var Task = require('../../lib/Task');
+const is_promise = x => x && typeof x.then === 'function';
 
 function asyncFn(tracker, val) {
-    return function (done) {
-        setTimeout(function () {
+    return done => {
+        setTimeout(() => {
             tracker.push(val);
             done();
         }, Math.random() * 20);
@@ -15,155 +14,149 @@ function asyncFn(tracker, val) {
 }
 
 function promisingFn(tracker, val) {
-    return function () {
-        var deferred = q.defer();
-
-        setTimeout(function () {
-            tracker.push(val);
-            deferred.resolve();
-        }, Math.random() * 20);
-
-        return deferred.promise;
+    return () => {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                tracker.push(val);
+                resolve();
+            }, Math.random() * 20);
+        });
     };
 }
 
-describe('Task', function () {
 
-    it('is function', function () {
-        assert.isFunction(Task);
+test('Task is function', () => {
+    assert.is_fun(Task);
+});
+
+test('Task expects 1 argument', () => {
+    assert.len(Task, 1);
+});
+
+test('Task constructor without arguments', () => {
+    const task = new Task();
+    assert.deepEqual(task._fns, [undefined]);
+});
+
+test('Task constructor with argument', () => {
+    const obj = {};
+    const task = new Task(obj);
+    assert.deepEqual(task._fns, [obj]);
+});
+
+test('Task constructor with arguments', () => {
+    const obj = {};
+    const obj2 = {};
+    const task = new Task(obj, obj2);
+    assert.deepEqual(task._fns, [obj]);
+});
+
+
+test('Task run() is function', () => {
+    const task = new Task();
+    assert.is_fun(task.run);
+});
+
+test('Task run() expects no arguments', () => {
+    const task = new Task();
+    assert.len(task.run, 0);
+});
+
+test('Task run() returns promise', () => {
+    const task = new Task();
+    assert.is_true(is_promise(task.run()));
+});
+
+test('Task run() single sync function', () => {
+    const fn0 = sinon.spy();
+    const task = new Task(fn0);
+    const promise = task.run();
+
+    assert.is_true(is_promise(promise));
+    assert.is_true(fn0.calledOnce);
+    assert.deepEqual(fn0.lastCall.args, []);
+});
+
+test('Task run() multiple sync functions', () => {
+    const fn0 = sinon.spy();
+    const fn1 = sinon.spy();
+    const fn2 = sinon.spy();
+    const task = new Task([fn0, fn1, fn2]);
+    const promise = task.run();
+
+    assert.is_true(is_promise(promise));
+    assert.is_true(fn0.calledOnce);
+    assert.deepEqual(fn0.lastCall.args, []);
+    assert.is_true(fn1.calledOnce);
+    assert.deepEqual(fn1.lastCall.args, []);
+    assert.is_true(fn2.calledOnce);
+    assert.deepEqual(fn2.lastCall.args, []);
+    assert.is_true(fn2.calledOnce);
+    assert.is_true(fn0.calledBefore(fn1));
+    assert.is_true(fn0.calledBefore(fn2));
+    assert.is_true(fn1.calledBefore(fn2));
+});
+
+test('Task run() single async functions', () => {
+    const tracker = [];
+    const fn0 = asyncFn(tracker, 0);
+    const task = new Task(fn0);
+    const promise = task.run();
+
+    assert.is_true(is_promise(promise));
+    assert.deepEqual(tracker, []);
+
+    return promise.then(() => {
+        assert.deepEqual(tracker, [0]);
     });
+});
 
-    it('expects 1 argument', function () {
-        assert.lengthOf(Task, 1);
+test('Task run() multiple async functions', () => {
+    const tracker = [];
+    const fn0 = asyncFn(tracker, 0);
+    const fn1 = asyncFn(tracker, 1);
+    const fn2 = asyncFn(tracker, 2);
+    const fn3 = asyncFn(tracker, 3);
+    const fn4 = asyncFn(tracker, 4);
+    const task = new Task([fn0, fn1, fn2, fn3, fn4]);
+    const promise = task.run();
+
+    assert.is_true(is_promise(promise));
+    assert.deepEqual(tracker, []);
+
+    return promise.then(() => {
+        assert.deepEqual(tracker.sort(), [0, 1, 2, 3, 4]);
     });
+});
 
-    it('constructor without arguments', function () {
-        var task = new Task();
-        assert.deepEqual(task._fns, [undefined]);
+test('Task run() single promising functions', () => {
+    const tracker = [];
+    const fn0 = promisingFn(tracker, 0);
+    const task = new Task(fn0);
+    const promise = task.run();
+
+    assert.is_true(is_promise(promise));
+    assert.deepEqual(tracker, []);
+
+    return promise.then(() => {
+        assert.deepEqual(tracker, [0]);
     });
+});
 
-    it('constructor with argument', function () {
-        var obj = {};
-        var task = new Task(obj);
-        assert.deepEqual(task._fns, [obj]);
-    });
+test('Task run() multiple promising functions', () => {
+    const tracker = [];
+    const fn0 = promisingFn(tracker, 0);
+    const fn1 = promisingFn(tracker, 1);
+    const fn2 = promisingFn(tracker, 2);
+    const fn3 = promisingFn(tracker, 3);
+    const fn4 = promisingFn(tracker, 4);
+    const task = new Task([fn0, fn1, fn2, fn3, fn4]);
+    const promise = task.run();
 
-    it('constructor with arguments', function () {
-        var obj = {};
-        var obj2 = {};
-        var task = new Task(obj, obj2);
-        assert.deepEqual(task._fns, [obj]);
-    });
+    assert.is_true(is_promise(promise));
+    assert.deepEqual(tracker, []);
 
-    describe('.run()', function () {
-
-        it('is function', function () {
-            var task = new Task();
-            assert.isFunction(task.run);
-        });
-
-        it('expects no arguments', function () {
-            var task = new Task();
-            assert.lengthOf(task.run, 0);
-        });
-
-        it('returns Q promise', function () {
-            var task = new Task();
-            assert.isTrue(q.isPromise(task.run()));
-        });
-
-        it('single sync function', function () {
-            var fn0 = sinon.spy();
-            var task = new Task(fn0);
-            var promise = task.run();
-
-            assert.isTrue(q.isPromise(promise));
-            assert.isTrue(fn0.calledOnce);
-            assert.deepEqual(fn0.lastCall.args, []);
-        });
-
-        it('multiple sync functions', function () {
-            var fn0 = sinon.spy();
-            var fn1 = sinon.spy();
-            var fn2 = sinon.spy();
-            var task = new Task([fn0, fn1, fn2]);
-            var promise = task.run();
-
-            assert.isTrue(q.isPromise(promise));
-            assert.isTrue(fn0.calledOnce);
-            assert.deepEqual(fn0.lastCall.args, []);
-            assert.isTrue(fn1.calledOnce);
-            assert.deepEqual(fn1.lastCall.args, []);
-            assert.isTrue(fn2.calledOnce);
-            assert.deepEqual(fn2.lastCall.args, []);
-            assert.isTrue(fn2.calledOnce);
-            assert.isTrue(fn0.calledBefore(fn1));
-            assert.isTrue(fn0.calledBefore(fn2));
-            assert.isTrue(fn1.calledBefore(fn2));
-        });
-
-        it('single async functions', function () {
-            var tracker = [];
-            var fn0 = asyncFn(tracker, 0);
-            var task = new Task(fn0);
-            var promise = task.run();
-
-            assert.isTrue(q.isPromise(promise));
-            assert.deepEqual(tracker, []);
-
-            return promise.then(function () {
-                assert.deepEqual(tracker, [0]);
-            });
-        });
-
-        it('multiple async functions', function () {
-            var tracker = [];
-            var fn0 = asyncFn(tracker, 0);
-            var fn1 = asyncFn(tracker, 1);
-            var fn2 = asyncFn(tracker, 2);
-            var fn3 = asyncFn(tracker, 3);
-            var fn4 = asyncFn(tracker, 4);
-            var task = new Task([fn0, fn1, fn2, fn3, fn4]);
-            var promise = task.run();
-
-            assert.isTrue(q.isPromise(promise));
-            assert.deepEqual(tracker, []);
-
-            return promise.then(function () {
-                assert.deepEqual(tracker.sort(), [0, 1, 2, 3, 4]);
-            });
-        });
-
-        it('single promising functions', function () {
-            var tracker = [];
-            var fn0 = promisingFn(tracker, 0);
-            var task = new Task(fn0);
-            var promise = task.run();
-
-            assert.isTrue(q.isPromise(promise));
-            assert.deepEqual(tracker, []);
-
-            return promise.then(function () {
-                assert.deepEqual(tracker, [0]);
-            });
-        });
-
-        it('multiple promising functions', function () {
-            var tracker = [];
-            var fn0 = promisingFn(tracker, 0);
-            var fn1 = promisingFn(tracker, 1);
-            var fn2 = promisingFn(tracker, 2);
-            var fn3 = promisingFn(tracker, 3);
-            var fn4 = promisingFn(tracker, 4);
-            var task = new Task([fn0, fn1, fn2, fn3, fn4]);
-            var promise = task.run();
-
-            assert.isTrue(q.isPromise(promise));
-            assert.deepEqual(tracker, []);
-
-            return promise.then(function () {
-                assert.deepEqual(tracker.sort(), [0, 1, 2, 3, 4]);
-            });
-        });
+    return promise.then(() => {
+        assert.deepEqual(tracker.sort(), [0, 1, 2, 3, 4]);
     });
 });

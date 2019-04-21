@@ -1,10 +1,10 @@
 {
   "name": "mkr",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "Target and task based build tool for Node.js.",
-  "homepage": "http://larsjung.de/mkr/",
+  "homepage": "https://larsjung.de/mkr/",
   "bugs": "https://github.com/lrsjng/mkr/issues",
-  "author": "Lars Jung <lrsjng@gmail.com> (http://larsjung.de)",
+  "author": "Lars Jung <lrsjng@gmail.com> (https://larsjung.de)",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -15,25 +15,21 @@
     "mkr": "./bin/mkr.js"
   },
   "scripts": {
-    "test": "mocha",
-    "coverage": "istanbul cover _mocha -- -R dot"
+    "lint": "eslint .",
+    "test": "node test",
+    "precommit": "npm run -s lint && npm run -s test"
   },
   "dependencies": {
-    "babel": "^5.8.23",
-    "chalk": "^1.0.0",
-    "commander": "^2.8.1",
-    "lodash": "^3.9.3",
-    "minimist": "^1.1.1",
-    "q": "^1.4.1"
+    "chalk": "2.4.2",
+    "commander": "2.20.0",
+    "minimist": "1.2.0"
   },
   "devDependencies": {
-    "chai": "^3.0.0",
-    "istanbul": "^0.3.17",
-    "mocha": "^2.2.5",
-    "sinon": "^1.15.4"
+    "eslint": "5.16.0",
+    "scar": "1.6.0",
+    "sinon": "7.3.2"
   },
   "engines": {
-    "node": ">=0.10",
-    "iojs": ">=1.0.0"
+    "node": ">=8.0.0"
   }
 }

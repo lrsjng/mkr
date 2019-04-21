@@ -1,152 +1,143 @@
-'use strict';
+const sinon = require('sinon');
+const {test, assert} = require('scar');
+const Target = require('../../lib/Target');
+const Task = require('../../lib/Task');
 
-var assert = require('chai').assert;
-var q = require('q');
-var sinon = require('sinon');
-var Target = require('../../lib/Target');
-var Task = require('../../lib/Task');
 
-describe('Target', function () {
+test('Target is function', () => {
+    assert.is_fun(Target);
+});
 
-    it('is function', function () {
-        assert.isFunction(Target);
+test('Target expects 3 arguments', () => {
+    assert.len(Target, 3);
+});
+
+test('Target constructor without arguments', () => {
+    const target = new Target();
+
+    assert.equal(target.name, 'unnamed');
+    assert.deepEqual(target.dependencies, []);
+    assert.deepEqual(target.description, '');
+    assert.deepEqual(target._tasks, []);
+});
+
+test('Target constructor with arguments', () => {
+    const obj1 = {};
+    const obj2 = {};
+    const obj3 = {};
+    const target = new Target(obj1, obj2, obj3);
+
+    assert.equal(target.name, obj1);
+    assert.equal(target.dependencies, obj2);
+    assert.equal(target.description, obj3);
+    assert.deepEqual(target._tasks, []);
+});
+
+
+test('Target task() is function', () => {
+    const target = new Target();
+    assert.is_fun(target.task);
+});
+
+test('Target task() expects 1 argument', () => {
+    const target = new Target();
+    assert.len(target.task, 1);
+});
+
+test('Target task() chainable, returns this', () => {
+    const target = new Target();
+    assert.equal(target.task(), target);
+});
+
+test('Target task() without arguments', () => {
+    const target = new Target();
+    assert.deepEqual(target._tasks, []);
+    assert.equal(target.task(), target);
+    assert.deepEqual(target._tasks, [new Task()]);
+});
+
+test('Target task() with arguments', () => {
+    const obj = {};
+    const obj2 = {};
+    const target = new Target();
+    assert.deepEqual(target._tasks, []);
+    assert.equal(target.task([obj, obj2]), target);
+    assert.deepEqual(target._tasks, [new Task([obj, obj2])]);
+});
+
+test('Target task() multiple calls', () => {
+    const obj = {};
+    const obj2 = {};
+    const target = new Target();
+    assert.deepEqual(target._tasks, []);
+    assert.equal(target.task([obj, obj2]), target);
+    assert.deepEqual(target._tasks, [new Task([obj, obj2])]);
+    assert.equal(target.task([obj]), target);
+    assert.deepEqual(target._tasks, [new Task([obj, obj2]), new Task([obj])]);
+    assert.equal(target.task(), target);
+    assert.deepEqual(target._tasks, [new Task([obj, obj2]), new Task([obj]), new Task()]);
+});
+
+
+test('Target run() is function', () => {
+    const target = new Target();
+    assert.is_fun(target.run);
+});
+
+test('Target run() expects 1 argument', () => {
+    const target = new Target();
+    assert.len(target.run, 1);
+});
+
+test('Target run() returns Q promise', () => {
+    const target = new Target();
+    assert.is_true(typeof target.run().then === 'function');
+});
+
+test('Target run() runs tasks in sequence', () => {
+    const fn1 = sinon.spy();
+    const fn2 = sinon.spy();
+    const fn3 = sinon.spy();
+    const target = new Target();
+    target.task(fn1);
+    target.task(fn2);
+    target.task(fn3);
+
+    return target.run().then(() => {
+        assert.is_true(fn1.calledOnce);
+        assert.is_true(fn2.calledOnce);
+        assert.is_true(fn3.calledOnce);
+        assert.is_true(fn1.calledBefore(fn2));
+        assert.is_true(fn2.calledBefore(fn3));
     });
+});
 
-    it('expects 3 arguments', function () {
-        assert.lengthOf(Target, 3);
-    });
+test('Target run() runs reporter correct', () => {
+    const reporter = {
+        beforeTarget: sinon.spy(),
+        afterTarget: sinon.spy()
+    };
+    const fn1 = sinon.spy();
+    const fn2 = sinon.spy();
+    const fn3 = sinon.spy();
+    const target = new Target();
+    target.task(fn1);
+    target.task(fn2);
+    target.task(fn3);
 
-    it('constructor without arguments', function () {
-        var target = new Target();
+    return target.run(reporter).then(() => {
+        assert.is_true(reporter.beforeTarget.calledOnce);
+        assert.is_true(reporter.afterTarget.calledOnce);
+        assert.is_true(fn1.calledOnce);
+        assert.is_true(fn2.calledOnce);
+        assert.is_true(fn3.calledOnce);
 
-        assert.strictEqual(target.name, 'unnamed');
-        assert.deepEqual(target.dependencies, []);
-        assert.deepEqual(target.description, '');
-        assert.deepEqual(target._tasks, []);
-    });
+        assert.is_true(reporter.beforeTarget.calledBefore(fn1));
+        assert.is_true(fn1.calledBefore(fn2));
+        assert.is_true(fn2.calledBefore(fn3));
+        assert.is_true(fn3.calledBefore(reporter.afterTarget));
 
-    it('constructor with arguments', function () {
-        var obj1 = {};
-        var obj2 = {};
-        var obj3 = {};
-        var target = new Target(obj1, obj2, obj3);
-
-        assert.strictEqual(target.name, obj1);
-        assert.strictEqual(target.dependencies, obj2);
-        assert.strictEqual(target.description, obj3);
-        assert.deepEqual(target._tasks, []);
-    });
-
-    describe('.task()', function () {
-
-        it('is function', function () {
-            var target = new Target();
-            assert.isFunction(target.task);
-        });
-
-        it('expects 1 argument', function () {
-            var target = new Target();
-            assert.lengthOf(target.task, 1);
-        });
-
-        it('chainable, returns this', function () {
-            var target = new Target();
-            assert.strictEqual(target.task(), target);
-        });
-
-        it('without arguments', function () {
-            var target = new Target();
-            assert.deepEqual(target._tasks, []);
-            assert.strictEqual(target.task(), target);
-            assert.deepEqual(target._tasks, [new Task()]);
-        });
-
-        it('with arguments', function () {
-            var obj = {};
-            var obj2 = {};
-            var target = new Target();
-            assert.deepEqual(target._tasks, []);
-            assert.strictEqual(target.task([obj, obj2]), target);
-            assert.deepEqual(target._tasks, [new Task([obj, obj2])]);
-        });
-
-        it('multiple calls', function () {
-            var obj = {};
-            var obj2 = {};
-            var target = new Target();
-            assert.deepEqual(target._tasks, []);
-            assert.strictEqual(target.task([obj, obj2]), target);
-            assert.deepEqual(target._tasks, [new Task([obj, obj2])]);
-            assert.strictEqual(target.task([obj]), target);
-            assert.deepEqual(target._tasks, [new Task([obj, obj2]), new Task([obj])]);
-            assert.strictEqual(target.task(), target);
-            assert.deepEqual(target._tasks, [new Task([obj, obj2]), new Task([obj]), new Task()]);
-        });
-    });
-
-    describe('.run()', function () {
-
-        it('is function', function () {
-            var target = new Target();
-            assert.isFunction(target.run);
-        });
-
-        it('expects 1 argument', function () {
-            var target = new Target();
-            assert.lengthOf(target.run, 1);
-        });
-
-        it('returns Q promise', function () {
-            var target = new Target();
-            assert.isTrue(q.isPromise(target.run()));
-        });
-
-        it('runs tasks in sequence', function () {
-            var fn1 = sinon.spy();
-            var fn2 = sinon.spy();
-            var fn3 = sinon.spy();
-            var target = new Target();
-            target.task(fn1);
-            target.task(fn2);
-            target.task(fn3);
-
-            return target.run().then(function () {
-                assert.isTrue(fn1.calledOnce);
-                assert.isTrue(fn2.calledOnce);
-                assert.isTrue(fn3.calledOnce);
-                assert.isTrue(fn1.calledBefore(fn2));
-                assert.isTrue(fn2.calledBefore(fn3));
-            });
-        });
-
-        it('runs reporter correct', function () {
-            var reporter = {
-                    beforeTarget: sinon.spy(),
-                    afterTarget: sinon.spy()
-                };
-            var fn1 = sinon.spy();
-            var fn2 = sinon.spy();
-            var fn3 = sinon.spy();
-            var target = new Target();
-            target.task(fn1);
-            target.task(fn2);
-            target.task(fn3);
-
-            return target.run(reporter).then(function () {
-                assert.isTrue(reporter.beforeTarget.calledOnce);
-                assert.isTrue(reporter.afterTarget.calledOnce);
-                assert.isTrue(fn1.calledOnce);
-                assert.isTrue(fn2.calledOnce);
-                assert.isTrue(fn3.calledOnce);
-
-                assert.isTrue(reporter.beforeTarget.calledBefore(fn1));
-                assert.isTrue(fn1.calledBefore(fn2));
-                assert.isTrue(fn2.calledBefore(fn3));
-                assert.isTrue(fn3.calledBefore(reporter.afterTarget));
-
-                assert.deepEqual(reporter.beforeTarget.lastCall.args, [target]);
-                assert.deepEqual(reporter.afterTarget.lastCall.args, []);
-            });
-        });
+        assert.deepEqual(reporter.beforeTarget.lastCall.args, [target]);
+        assert.deepEqual(reporter.afterTarget.lastCall.args, []);
     });
 });
