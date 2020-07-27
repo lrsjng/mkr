@@ -1,15 +1,11 @@
 {
   "name": "mkr",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "Target and task based build tool for Node.js.",
   "homepage": "https://larsjung.de/mkr/",
-  "bugs": "https://github.com/lrsjng/mkr/issues",
   "author": "Lars Jung <lrsjng@gmail.com> (https://larsjung.de)",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/lrsjng/mkr.git"
-  },
+  "repository": "github:lrsjng/mkr",
   "main": "./lib/Mkr",
   "bin": {
     "mkr": "./bin/mkr.js"
@@ -20,16 +16,13 @@
     "precommit": "npm run -s lint && npm run -s test"
   },
   "dependencies": {
-    "chalk": "2.4.2",
-    "commander": "2.20.0",
-    "minimist": "1.2.0"
+    "chalk": "4.1.0",
+    "commander": "6.0.0",
+    "minimist": "1.2.5"
   },
   "devDependencies": {
-    "eslint": "5.16.0",
-    "scar": "1.6.0",
-    "sinon": "7.3.2"
-  },
-  "engines": {
-    "node": ">=8.0.0"
+    "eslint": "7.5.0",
+    "scar": "2.3.0",
+    "sinon": "9.0.2"
   }
 }
